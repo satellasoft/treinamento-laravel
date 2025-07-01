@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil do Usuário</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #2d3748;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Animated background particles */
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(180deg); }
+    }
+
+    /* Profile Header */
+    .profile-header {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    }
+
+    .avatar-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    .avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .avatar-ring {
+      position: absolute;
+      top: -8px;
+      left: -8px;
+      width: 156px;
+      height: 156px;
+      border: 2px solid transparent;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+      background-size: 400% 400%;
+      animation: gradientShift 3s ease infinite;
+      z-index: 1;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .profile-name {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-bio {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.1rem;
+      font-weight: 300;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Books Feed */
+    .books-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+      margin-bottom: 4rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .book-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      width: 100%;
+    }
+
+    .book-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+      border-radius: 24px 24px 0 0;
+    }
+
+    .book-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .book-image {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      transition: all 0.4s ease;
+    }
+
+    .book-card:hover .book-image {
+      transform: scale(1.05);
+    }
+
+    .book-content {
+      padding: 2rem;
+    }
+
+    .book-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+
+    .book-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .book-author, .book-category {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .book-author i, .book-category i {
+      color: #667eea;
+      width: 16px;
+    }
+
+    .book-rating {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .star {
+      color: #ffd700;
+      font-size: 0.9rem;
+    }
+
+    .rating-text {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* Pagination */
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 3rem;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(20px);
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .pagination button {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pagination button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .pagination button.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .pagination button:disabled:hover {
+      transform: none;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .profile-header {
+        padding: 3rem 1.5rem 2rem;
+      }
+
+      .profile-name {
+        font-size: 2rem;
+      }
+
+      .stats-container {
+        gap: 2rem;
+      }
+
+      .books-grid {
+        gap: 2rem;
+        max-width: 100%;
+      }
+
+      .book-content {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Loading animation */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-particles" id="particles"></div>
+  
+  <div class="container">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="avatar-container">
+        <div class="avatar-ring"></div>
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face" alt="Avatar" class="avatar">
+      </div>
+      <h1 class="profile-name">João Silva</h1>
+      <p class="profile-bio">Apaixonado por literatura e sempre em busca de novas histórias para descobrir. Leitor voraz de ficção científica, filosofia e biografias inspiradoras.</p>
+      
+      <div class="stats-container">
+        <div class="stat-item">
+          <span class="stat-number">127</span>
+          <span class="stat-label">Livros Lidos</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">23</span>
+          <span class="stat-label">Resenhas</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">45</span>
+          <span class="stat-label">Favoritos</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Books Grid -->
+    <div class="books-grid">
+      <div class="book-card">
+        <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=280&fit=crop" alt="Capa do Livro" class="book-image">
+        <div class="book-content">
+          <h3 class="book-title">O Alquimista</h3>
+          <div class="book-meta">
+            <div class="book-author">
+              <i class="fas fa-user"></i>
+              <span>Paulo Coelho</span>
+            </div>
+            <div class="book-category">
+              <i class="fas fa-tag"></i>
+              <span>Ficção Filosófica</span>
+            </div>
+          </div>
+          <div class="book-rating">
+            <div class="stars">
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+            </div>
+            <span class="rating-text">5.0 (248 avaliações)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=280&fit=crop" alt="Capa do Livro" class="book-image">
+        <div class="book-content">
+          <h3 class="book-title">Sapiens: Uma Breve História da Humanidade</h3>
+          <div class="book-meta">
+            <div class="book-author">
+              <i class="fas fa-user"></i>
+              <span>Yuval Noah Harari</span>
+            </div>
+            <div class="book-category">
+              <i class="fas fa-tag"></i>
+              <span>História & Antropologia</span>
+            </div>
+          </div>
+          <div class="book-rating">
+            <div class="stars">
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="far fa-star" style="color: #ddd;"></i>
+            </div>
+            <span class="rating-text">4.2 (1.2k avaliações)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <img src="https://images.unsplash.com/photo-1535905557558-afc4877cdf3f?w=400&h=280&fit=crop" alt="Capa do Livro" class="book-image">
+        <div class="book-content">
+          <h3 class="book-title">1984</h3>
+          <div class="book-meta">
+            <div class="book-author">
+              <i class="fas fa-user"></i>
+              <span>George Orwell</span>
+            </div>
+            <div class="book-category">
+              <i class="fas fa-tag"></i>
+              <span>Ficção Distópica</span>
+            </div>
+          </div>
+          <div class="book-rating">
+            <div class="stars">
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+            </div>
+            <span class="rating-text">4.8 (892 avaliações)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=280&fit=crop" alt="Capa do Livro" class="book-image">
+        <div class="book-content">
+          <h3 class="book-title">O Poder do Hábito</h3>
+          <div class="book-meta">
+            <div class="book-author">
+              <i class="fas fa-user"></i>
+              <span>Charles Duhigg</span>
+            </div>
+            <div class="book-category">
+              <i class="fas fa-tag"></i>
+              <span>Autoajuda & Psicologia</span>
+            </div>
+          </div>
+          <div class="book-rating">
+            <div class="stars">
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="far fa-star" style="color: #ddd;"></i>
+            </div>
+            <span class="rating-text">4.1 (567 avaliações)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=280&fit=crop" alt="Capa do Livro" class="book-image">
+        <div class="book-content">
+          <h3 class="book-title">Dune</h3>
+          <div class="book-meta">
+            <div class="book-author">
+              <i class="fas fa-user"></i>
+              <span>Frank Herbert</span>
+            </div>
+            <div class="book-category">
+              <i class="fas fa-tag"></i>
+              <span>Ficção Científica</span>
+            </div>
+          </div>
+          <div class="book-rating">
+            <div class="stars">
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+            </div>
+            <span class="rating-text">4.9 (1.8k avaliações)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="book-card">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=280&fit=crop" alt="Capa do Livro" class="book-image">
+        <div class="book-content">
+          <h3 class="book-title">Mindset: A Nova Psicologia do Sucesso</h3>
+          <div class="book-meta">
+            <div class="book-author">
+              <i class="fas fa-user"></i>
+              <span>Carol S. Dweck</span>
+            </div>
+            <div class="book-category">
+              <i class="fas fa-tag"></i>
+              <span>Desenvolvimento Pessoal</span>
+            </div>
+          </div>
+          <div class="book-rating">
+            <div class="stars">
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="fas fa-star star"></i>
+              <i class="far fa-star" style="color: #ddd;"></i>
+            </div>
+            <span class="rating-text">4.3 (743 avaliações)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+      <div class="pagination">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Create floating particles
+    function createParticles() {
+      const particles = document.getElementById('particles');
+      const particleCount = 50;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+        particles.appendChild(particle);
+      }
+    }
+
+    // Initialize particles
+    createParticles();
+
+    // Add smooth scroll behavior
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animate cards on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      // Observe all book cards
+      document.querySelectorAll('.book-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+      });
+
+      // Pagination functionality
+      document.querySelectorAll('.pagination button').forEach(button => {
+        button.addEventListener('click', function() {
+          if (!this.disabled && !this.classList.contains('active')) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.pagination button').forEach(btn => {
+              btn.classList.remove('active');
+            });
+            
+            // Add active class to clicked button (if it's a number)
+            if (!this.innerHTML.includes('chevron')) {
+              this.classList.add('active');
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

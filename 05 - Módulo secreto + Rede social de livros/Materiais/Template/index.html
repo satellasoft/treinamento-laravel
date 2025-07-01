@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rede Social de Livros</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { height: 100%; font-family: 'Inter', sans-serif; }
+
+    body {
+      background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .buttons button, .buttons a {
+      padding: 0.75rem 2rem;
+      background-color: #ffffff;
+      color: #111;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .buttons a:hover, .buttons button:hover {
+      background-color: #f1f1f1;
+    }
+
+    .search-form input {
+      padding: 0.75rem 1rem;
+      width: 280px;
+      max-width: 90vw;
+      border: none;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .search-form button {
+      padding: 0.6rem 1.5rem;
+      border: none;
+      background-color: #ffffff;
+      color: #111;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .search-form button:hover {
+      background-color: #f1f1f1;
+    }
+
+    /* MODAL */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: left;
+      color: #111;
+    }
+
+    .modal-content h2 {
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .modal-content button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #2575fc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close-btn {
+      text-align: center;
+      margin-top: 1rem;
+      color: #666;
+      cursor: pointer;
+    }
+
+    /* ALERT */
+    .alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #ff4d4f;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      display: none;
+      z-index: 9999;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="container">
+    <h1>Rede Social de Livros</h1>
+    <div class="buttons">
+      <button onclick="abrirLogin()">Entrar</button>
+      <a href="/cadastro">Cadastrar-se</a>
+    </div>
+    <form class="search-form" action="/buscar-usuario" method="GET">
+      <input type="text" name="q" placeholder="Buscar usuário por nome ou @" required />
+      <br />
+      <button type="submit">Buscar</button>
+    </form>
+  </div>
+
+  <!-- Modal Login -->
+  <div class="modal" id="modalLogin">
+    <div class="modal-content">
+      <h2>Entrar</h2>
+      <input type="email" id="email" placeholder="Seu e-mail" />
+      <input type="password" id="senha" placeholder="Sua senha" />
+      <button onclick="logar()">Acessar</button>
+      <div class="close-btn" onclick="fecharLogin()">Cancelar</div>
+    </div>
+  </div>
+
+  <!-- Alerta -->
+  <div class="alert" id="alertaErro">E-mail ou senha inválidos</div>
+
+  <script>
+    function abrirLogin() {
+      document.getElementById('modalLogin').style.display = 'flex';
+    }
+
+    function fecharLogin() {
+      document.getElementById('modalLogin').style.display = 'none';
+    }
+
+    function logar() {
+      const email = document.getElementById('email').value.trim();
+      const senha = document.getElementById('senha').value.trim();
+
+      if (email === '' || senha === '') {
+        mostrarErro('Preencha todos os campos');
+        return;
+      }
+
+      if (email !== 'teste@teste.com' || senha !== '123456') {
+        mostrarErro('E-mail ou senha inválidos');
+        return;
+      }
+
+      alert('Login OK!');
+      // window.location.href = '/painel'; // redireciona se quiser
+    }
+
+    function mostrarErro(msg) {
+      const alerta = document.getElementById('alertaErro');
+      alerta.innerText = msg;
+      alerta.style.display = 'block';
+      setTimeout(() => {
+        alerta.style.display = 'none';
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

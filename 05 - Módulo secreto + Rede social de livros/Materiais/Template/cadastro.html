@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cadastro - Rede Social de Livros</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 2rem;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 0.25rem;
+      font-weight: bold;
+    }
+
+    input, textarea {
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 0.75rem;
+      background-color: #ffffff;
+      color: #111;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #f1f1f1;
+    }
+
+    a {
+      display: block;
+      margin-top: 1rem;
+      text-align: center;
+      color: #ccc;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Crie sua conta</h2>
+    <form action="/cadastro" method="POST">
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" required />
+
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="bio">Bio</label>
+      <textarea id="bio" name="bio" rows="4" placeholder="Fale um pouco sobre você..."></textarea>
+
+      <button type="submit">Cadastrar</button>
+    </form>
+    <a href="/login">Já tem conta? Entrar</a>
+  </div>
+</body>
+</html>

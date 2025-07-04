@@ -67,4 +67,9 @@ class User extends Authenticatable
     {
         $this->attributes[self::USERNAME] = strtolower($value);
     }
+
+    public function getFirstNameAttribute()
+    {
+        return explode(' ', $this->name)[0];
+    }
 }

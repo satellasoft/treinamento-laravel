@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\RegisterUserRequest;
 use App\Http\Requests\User\UpdatePassswordUserRequest;
+use App\Http\Requests\User\UpdatePhotoUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserAccountResource;
 use App\Repositories\Contracts\UserRepositoryInterface;
@@ -76,8 +77,9 @@ class UserController extends Controller
         return redirect()->route('login.logout');
     }
 
-    public function updatePhoto(): bool
+    public function updatePhoto(UpdatePhotoUserRequest $request): bool
     {
+        dd($request->file('photo'));
         return true;
     }
 }

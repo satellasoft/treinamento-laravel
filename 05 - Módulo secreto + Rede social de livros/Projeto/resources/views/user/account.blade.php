@@ -45,9 +45,9 @@
         <div class="card border-danger mb-4">
             <div class="card-body">
                 <h6 class="card-title">Alterar senha</h6>
-                
+
                 <form id="formSenha" onsubmit="return validarSenha()" method="post"
-                    action="{{ route('user.update.passsword') }}">
+                    action="{{ route('user.update.password') }}">
                     @method('patch')
                     @csrf
 
@@ -98,9 +98,12 @@
         <div class="card border-danger mb-4">
             <div class="card-body">
                 <h6 class="card-title">Alterar imagem (250x250)</h6>
-                <form>
+                <form method="POST" action="{{ route('user.update.photo') }}" enctype="multipart/form-data">
+                    @method('patch')
+                    @csrf
+
                     <div class="d-flex gap-2 mb-3">
-                        <input type="file" class="form-control" id="photoInput" accept="image/*">
+                        <input type="file" class="form-control" id="photoInput" name="photo" accept="image/*">
                         <button type="submit" class="btn btn-success">Alterar</button>
                     </div>
 

@@ -9,7 +9,6 @@ Route::get('/', function () {
     return view('home.home');
 })->name('home');
 
-
 Route::get('/hash', function () {
     dd(\Illuminate\Support\Facades\Hash::make('a123456z'));
 });
@@ -28,6 +27,6 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->prefix('user')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
     Route::put('/', [UserController::class, 'update'])->name('user.update');
-    Route::patch('/password', [UserController::class, 'updatePassword'])->name('user.update.passsword');
+    Route::patch('/password', [UserController::class, 'updatePassword'])->name('user.update.password');
     Route::patch('/photo', [UserController::class, 'updatePhoto'])->name('user.update.photo');
 });

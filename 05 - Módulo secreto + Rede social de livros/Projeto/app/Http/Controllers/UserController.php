@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\RegisterUserRequest;
+use App\Http\Requests\User\UpdatePassswordUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserAccountResource;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -57,9 +59,21 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Dados do usuário alterado com sucesso!');
     }
 
-    public function updatePassword(): bool
+    public function updatePassword(UpdatePassswordUserRequest $request)
     {
-        return true;
+        $userID = Auth::user()->id;
+
+        $form = [
+            'password' => Hash::make($request->password)
+        ];
+
+        if (!$this->userRepository->update($userID, $form)) {
+            return redirect()->back()->withErrors([
+                'Houve um erro ao tentar alterar a senha. Por favor, tente novamente.'
+            ]);
+        }
+
+        return redirect()->route('login.logout');
     }
 
     public function updatePhoto(): bool

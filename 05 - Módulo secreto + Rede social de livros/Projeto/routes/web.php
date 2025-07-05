@@ -9,6 +9,11 @@ Route::get('/', function () {
     return view('home.home');
 })->name('home');
 
+
+Route::get('/hash', function () {
+    dd(\Illuminate\Support\Facades\Hash::make('a123456z'));
+});
+
 Route::post('/register', [UserController::class, 'register'])->name('user.register');
 
 Route::prefix('login')->group(function () {
@@ -26,5 +31,3 @@ Route::middleware('auth')->prefix('user')->group(function () {
     Route::patch('/password', [UserController::class, 'updatePassword'])->name('user.update.passsword');
     Route::patch('/photo', [UserController::class, 'updatePhoto'])->name('user.update.photo');
 });
-
-

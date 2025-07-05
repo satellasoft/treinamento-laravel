@@ -45,7 +45,12 @@
         <div class="card border-danger mb-4">
             <div class="card-body">
                 <h6 class="card-title">Alterar senha</h6>
-                <form id="formSenha" onsubmit="return validarSenha()">
+                
+                <form id="formSenha" onsubmit="return validarSenha()" method="post"
+                    action="{{ route('user.update.passsword') }}">
+                    @method('patch')
+                    @csrf
+
                     <div class="d-flex gap-2 mb-2">
                         <input type="password" name="password" id="novaSenha" class="form-control"
                             placeholder="Digite a nova senha">
@@ -54,6 +59,8 @@
                     </div>
                     <div id="alertaSenha" class="alert alert-danger d-none" role="alert"></div>
                 </form>
+
+                <p class="alert alert-warning">Após alterar a sua senha, você será desconectado.</p>
             </div>
         </div>
 

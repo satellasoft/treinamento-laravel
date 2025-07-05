@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\User\RegisterUserRequest;
+use App\Http\Resources\UserAccountResource;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -32,11 +33,29 @@ class UserController extends Controller
 
     public function index()
     {
-        return null;
+        $userResource  = new UserAccountResource(
+            $this->userRepository->find(
+                Auth::user()->id
+            )
+        );
+
+        return view('user.account', [
+            'user' => $userResource->toArray(request())
+        ]);
     }
 
     public function update()
     {
         $userID = Auth::user()->id;
+    }
+
+    public function updatePassword(): bool
+    {
+        return true;
+    }
+
+    public function updatePhoto(): bool
+    {
+        return true;
     }
 }

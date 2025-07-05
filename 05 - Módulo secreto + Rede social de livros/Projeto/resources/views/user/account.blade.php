@@ -20,6 +20,11 @@
 
 @section('body')
     <div class="container py-4 max-container">
+
+        <div>
+            @include('partials.alerts')
+        </div>
+
         <!-- Form dados -->
         <div class="card border-danger mb-4">
             <div class="card-body">
@@ -30,9 +35,7 @@
 
                     <input type="text" name="name" class="form-control mb-2" placeholder="Nome"
                         value="{{ $user['name'] }}">
-                    <textarea name="bio" rows="3" class="form-control mb-3" placeholder="Bio">
-                        {{ $user['bio'] }}
-                    </textarea>
+                    <textarea name="bio" rows="3" class="form-control mb-3" placeholder="Bio">{{ $user['bio'] }}</textarea>
                     <button type="submit" class="btn btn-success">Salvar</button>
                 </form>
             </div>

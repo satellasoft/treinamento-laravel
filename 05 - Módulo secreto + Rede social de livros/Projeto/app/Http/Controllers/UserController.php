@@ -8,6 +8,7 @@ use App\Http\Requests\User\UpdatePhotoUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserAccountResource;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Services\ImageUploadService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -77,9 +78,30 @@ class UserController extends Controller
         return redirect()->route('login.logout');
     }
 
-    public function updatePhoto(UpdatePhotoUserRequest $request): bool
+    public function updatePhoto(UpdatePhotoUserRequest $request)
     {
-        dd($request->file('photo'));
-        return true;
+        $imageUploadService = new ImageUploadService('public');
+
+        $filename = $imageUploadService->upload(
+            $request->file('photo'),
+            env('USER_DIR_PROFILE_UPLOAD')
+        );
+
+        $form = [
+            'photo' => $filename
+        ];
+
+        $currentPhoto = Auth::user()->photo;
+        $userID = Auth::user()->id;
+
+        if (!$this->userRepository->update($userID, $form)) {
+            return redirect()->back()->withErrors([
+                'Houve um erro ao tentar alterar a imagem do usuário. Por favor, tente novamente.'
+            ]);
+        }
+
+        $imageUploadService->delete($currentPhoto, env('USER_DIR_PROFILE_UPLOAD'));
+
+        return redirect()->back()->with('success', 'Imagem do usuário alterado com sucesso!');
     }
 }

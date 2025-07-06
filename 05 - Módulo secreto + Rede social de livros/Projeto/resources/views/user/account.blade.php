@@ -93,7 +93,6 @@
             }
         </script>
 
-
         <!-- Form photo -->
         <div class="card border-danger mb-4">
             <div class="card-body">
@@ -109,12 +108,11 @@
 
                     <div class="d-flex justify-content-around">
                         <div class="text-center">
-                            <img src="https://via.placeholder.com/100x100.png?text=Atual" class="profile-img"
-                                id="fotoAtual">
+                            <img src="{{ $user['photo'] }}" class="profile-img" id="fotoAtual">
                             <div class="mt-2">Atual</div>
                         </div>
                         <div class="text-center">
-                            <img src="https://via.placeholder.com/100x100.png?text=Nova" class="profile-img" id="fotoNova">
+                            <img src="" class="profile-img" id="fotoNova">
                             <div class="mt-2">Nova</div>
                         </div>
                     </div>

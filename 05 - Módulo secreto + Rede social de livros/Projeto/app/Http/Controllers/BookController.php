@@ -145,7 +145,9 @@ class BookController extends Controller
             ]);
         }
 
-        $imageUploadService->delete($legacyCover, env('BOOK_DIR_UPLOAD'));
+        if (!empty($legacyCover)) {
+            $imageUploadService->delete($legacyCover, env('BOOK_DIR_UPLOAD'));
+        }
 
         return redirect()->back()->with('success', 'Postagem alterada com sucesso!');
     }

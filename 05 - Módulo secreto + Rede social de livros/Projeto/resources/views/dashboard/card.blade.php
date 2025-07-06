@@ -4,7 +4,7 @@
         <img id="imagem-post" src="{{ $book['cover'] }}" class="w-100" alt="The Witcher">
         <button class="icon-btn edit-icon"
             onclick="abrirModalImagem(
-            document.getElementById('imagem-post').src, 
+            '{{ $book['cover'] }}', 
             '{{ route('book.update.photo', $book['id']) }}')
             ">
             <i class="bi bi-pencil-square"></i>
@@ -53,7 +53,7 @@
 <div class="modal fade" id="modalImagem" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="" method="post" id="frmUpdatePhoto">
+            <form action="" method="post" id="frmUpdatePhoto" enctype="multipart/form-data">
                 @csrf
                 @method('patch')
                 <div class="modal-header">
@@ -111,25 +111,6 @@
                     </div>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Confirmar Remoção -->
-<div class="modal fade" id="modalConfirmarRemocao" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-danger">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger">Confirmar Remoção</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                Tem certeza que deseja remover este livro?
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger">Sim, remover</button>
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            </div>
         </div>
     </div>
 </div>

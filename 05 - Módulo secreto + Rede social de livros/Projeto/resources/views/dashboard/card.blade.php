@@ -1,22 +1,32 @@
 <!-- Card Post -->
 <div class="card card-post shadow-sm">
     <div class="position-relative">
-        <img id="imagem-post" src="https://upload.wikimedia.org/wikipedia/pt/0/0c/Witcher_3_capa.png" class="w-100"
-            alt="The Witcher">
+        <img id="imagem-post" src="{{ $book->cover }}" class="w-100" alt="The Witcher">
         <button class="icon-btn edit-icon" onclick="abrirModalImagem(document.getElementById('imagem-post').src)">
             <i class="bi bi-pencil-square"></i>
         </button>
     </div>
     <div class="p-3">
-        <h5 class="mb-1">The Witcher</h5>
-        <small class="text-muted">Fulano de tal - Romance<br>Publicado em: 21/08/1992</small>
-        <p class="mt-2 mb-3">Lorem Ipsum is simply dummy text of the printing and typesetting industry...</p>
+        <h5 class="mb-1">{{ $book->title }}</h5>
+        <small class="text-muted">{{ $book->author }} - {{ $book->category->name }}<br>Publicado em:
+            {{ $book->created_at }}</small>
+        <p class="mt-2 mb-3">{{ $book->description }}</p>
         <div class="d-flex align-items-center justify-content-between">
             <div>
-                <i class="bi bi-hand-thumbs-up"></i> Gostou
-                <span class="ms-3"><i class="bi bi-check2-circle"></i> Finalizado</span>
+                <i class="bi {{ $book->favorite ? 'bi-hand-thumbs-up' : 'bi-hand-thumbs-down' }}"></i>
+                {{ $book->favorite ? 'Gostou' : 'Não gostou' }}
+
+                <span class="ms-3">
+                    <i class="bi {{ $book->complete ? 'bi-check2-circle' : 'bi-x-circle' }}"></i>
+                    {{ $book->complete ? 'Finalizado' : 'Não finalizado' }}
+                </span>
             </div>
-            <div class="text-warning">★★★★☆</div>
+
+            <div class="text-warning">
+                @for ($i = 1; $i <= 5; $i++)
+                    {{ $i <= $book->stars ? '★' : '☆' }}
+                @endfor
+            </div>
         </div>
         <div class="text-center mt-3">
             <button class="btn btn-secondary btn-sm" onclick="abrirModalEdicao()">Editar</button>

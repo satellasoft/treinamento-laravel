@@ -50,13 +50,20 @@
             <div>
                 @include('partials.alerts')
             </div>
-            
+
             <button class="btn btn-success">Postar</button>
         </form>
     </div>
 
-
     <div>
-        @include('dashboard.card')
+        @foreach ($books as $book)
+            <div class="mt-3">
+                @include('dashboard.card', ['book' => $book])
+            </div>
+        @endforeach
+
+        <div class="books-link mt-5">
+            {{ $books->links('pagination::bootstrap-4') }}
+        </div>
     </div>
 @endsection

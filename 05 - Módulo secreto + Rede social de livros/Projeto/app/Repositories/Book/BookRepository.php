@@ -15,4 +15,9 @@ class BookRepository implements BookRepositoryInterface
 
         return $book->save();
     }
+
+    public function getAllPaginated(int $perPage = 10)
+    {
+        return Book::paginate($perPage);
+    }
 }

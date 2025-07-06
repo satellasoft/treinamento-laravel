@@ -26,3 +26,8 @@
     text-decoration: none;
     color: #111;
 }
+
+.books-link ul{
+    text-align: center;
+    justify-content: center
+}

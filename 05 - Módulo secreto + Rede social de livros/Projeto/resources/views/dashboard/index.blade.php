@@ -63,7 +63,7 @@
         @endforeach
 
         <div class="books-link mt-5">
-            {{ $books->links('pagination::bootstrap-4') }}
+            {{ $paginator->links('pagination::bootstrap-4') }}
         </div>
     </div>
 @endsection

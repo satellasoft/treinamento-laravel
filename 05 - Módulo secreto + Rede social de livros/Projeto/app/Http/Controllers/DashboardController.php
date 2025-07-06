@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Repositories\Contracts\BookRepositoryInterface;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
-use Illuminate\Http\Request;
+use App\Http\Resources\BookResource;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -21,11 +22,14 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $books = $this->bookRepository->getAllPaginated(2);
+        $userID = Auth::user()->id;
+        $booksPaginator = $this->bookRepository->getAllPaginated($userID, 2);
+        $booksResource = BookResource::collection($booksPaginator);
 
         return view('dashboard.index', [
             'categories' => $this->categoryRepository->getAll(),
-            'books' => $books
+            'books' => $booksResource->toArray(request()),
+            'paginator' => $booksPaginator,
         ]);
     }
 }

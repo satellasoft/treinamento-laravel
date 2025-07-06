@@ -29,4 +29,20 @@ class BookRepository implements BookRepositoryInterface
 
         return $book->update($data);
     }
+
+    public function deleteByUserID(int $bookId, int $userID): bool
+    {
+        $book = Book::where('id', $bookId)->where('user_id', $userID)->first();
+
+        if (!$book) {
+            return false;
+        }
+
+        return $book->delete();
+    }
+
+    public function findByUserID(int $bookId, int $userID)
+    {
+        return Book::where('id', $bookId)->where('user_id', $userID)->first();
+    }
 }

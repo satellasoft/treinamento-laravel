@@ -2,7 +2,11 @@
 <div class="card card-post shadow-sm">
     <div class="position-relative">
         <img id="imagem-post" src="{{ $book['cover'] }}" class="w-100" alt="The Witcher">
-        <button class="icon-btn edit-icon" onclick="abrirModalImagem(document.getElementById('imagem-post').src)">
+        <button class="icon-btn edit-icon"
+            onclick="abrirModalImagem(
+            document.getElementById('imagem-post').src, 
+            '{{ route('book.update.photo', $book['id']) }}')
+            ">
             <i class="bi bi-pencil-square"></i>
         </button>
     </div>
@@ -29,17 +33,18 @@
             </div>
         </div>
         <div class="text-center mt-3">
-            <button class="btn btn-secondary btn-sm" onclick="abrirModalEdicao(this)" 
-                data-id="{{ $book['id'] }}"
-                data-title="{{ $book['title'] }}" 
-                data-author="{{ $book['author'] }}"
-                data-description="{{ $book['description'] }}" 
-                data-complete="{{ $book['complete'] }}"
-                data-favorite="{{ $book['favorite'] }}" 
-                data-stars="{{ $book['stars'] }}"
+            <button class="btn btn-secondary btn-sm" onclick="abrirModalEdicao(this)" data-id="{{ $book['id'] }}"
+                data-title="{{ $book['title'] }}" data-author="{{ $book['author'] }}"
+                data-description="{{ $book['description'] }}" data-complete="{{ $book['complete'] }}"
+                data-favorite="{{ $book['favorite'] }}" data-stars="{{ $book['stars'] }}"
                 data-action="{{ route('book.update', $book['id']) }}">
                 Editar
             </button>
+
+            <a class="btn btn-danger btn-sm" onclick="return confirm('Deseja realmente remover a postagem?')"
+                href="{{ route('book.delete', $book['id']) }}">
+                Remover
+            </a>
         </div>
     </div>
 </div>
@@ -48,18 +53,22 @@
 <div class="modal fade" id="modalImagem" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Alterar Imagem</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <img id="previewImagem" src="" class="img-fluid mb-3" alt="Preview">
-                <input type="text" id="novaImagemUrl" class="form-control" placeholder="Cole a nova URL da imagem">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="trocarImagem()">Salvar</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            </div>
+            <form action="" method="post" id="frmUpdatePhoto">
+                @csrf
+                @method('patch')
+                <div class="modal-header">
+                    <h5 class="modal-title">Alterar Imagem</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="previewImagem" src="" class="img-fluid mb-3" alt="Preview">
+                    <input type="file" id="cover" name="cover" accept="image/*" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -96,7 +105,6 @@
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
-                    <button class="btn btn-danger" onclick="confirmarRemocao()">Remover</button>
                     <div>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -127,9 +135,9 @@
 </div>
 
 <script>
-    function abrirModalImagem(imagemAtual) {
+    function abrirModalImagem(imagemAtual, postURL) {
         document.getElementById('previewImagem').src = imagemAtual;
-        document.getElementById('novaImagemUrl').value = imagemAtual;
+        document.querySelector('#frmUpdatePhoto').action = postURL;
         const modal = new bootstrap.Modal(document.getElementById('modalImagem'));
         modal.show();
     }
@@ -152,11 +160,5 @@
         modal.querySelector('form').action = botao.dataset.action;
 
         new bootstrap.Modal(modal).show();
-    }
-
-
-    function confirmarRemocao() {
-        const modal = new bootstrap.Modal(document.getElementById('modalConfirmarRemocao'));
-        modal.show();
     }
 </script>

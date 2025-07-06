@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Book\StoreBookRequest;
 use App\Models\Book;
 use App\Repositories\Contracts\BookRepositoryInterface;
+use App\Services\ImageUploadService;
 use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
-
     private BookRepositoryInterface $bookRepository;
 
     public function __construct(BookRepositoryInterface $bookRepository)
@@ -34,6 +34,19 @@ class BookController extends Controller
         }
 
         $form['user_id'] = Auth::user()->id;
+
+        if (isset($form['cover'])) {
+            $imageUploadService = new ImageUploadService('public');
+
+            $filename = $imageUploadService->upload(
+                $request->file('cover'),
+                env('BOOK_DIR_UPLOAD')
+            );
+
+            if (!empty($filename)) {
+                $form['cover'] = $filename;
+            }
+        }
 
         if (!$this->bookRepository->create($form)) {
             return redirect()->back()->withErrors([

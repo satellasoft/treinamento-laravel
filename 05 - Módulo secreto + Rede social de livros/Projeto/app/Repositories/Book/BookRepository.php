@@ -22,4 +22,11 @@ class BookRepository implements BookRepositoryInterface
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
     }
+
+    public function update(int $id, array $data): bool
+    {
+        $book = Book::find($id);
+
+        return $book->update($data);
+    }
 }

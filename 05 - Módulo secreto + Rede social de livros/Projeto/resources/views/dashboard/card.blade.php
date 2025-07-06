@@ -29,7 +29,17 @@
             </div>
         </div>
         <div class="text-center mt-3">
-            <button class="btn btn-secondary btn-sm" onclick="abrirModalEdicao()">Editar</button>
+            <button class="btn btn-secondary btn-sm" onclick="abrirModalEdicao(this)" 
+                data-id="{{ $book['id'] }}"
+                data-title="{{ $book['title'] }}" 
+                data-author="{{ $book['author'] }}"
+                data-description="{{ $book['description'] }}" 
+                data-complete="{{ $book['complete'] }}"
+                data-favorite="{{ $book['favorite'] }}" 
+                data-stars="{{ $book['stars'] }}"
+                data-action="{{ route('book.update', $book['id']) }}">
+                Editar
+            </button>
         </div>
     </div>
 </div>
@@ -58,34 +68,41 @@
 <div class="modal fade" id="modalEdicao" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Editar Livro</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <input type="text" class="form-control mb-2" placeholder="Título" value="The Witcher">
-                <input type="text" class="form-control mb-2" placeholder="Autor" value="Fulano de tal">
-                <textarea class="form-control mb-2" rows="3">Lorem Ipsum is simply dummy text...</textarea>
-                <div class="d-flex align-items-center gap-3 mb-3">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="edit-completo" checked>
-                        <label class="form-check-label" for="edit-completo">Completou</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="edit-favorito">
-                        <label class="form-check-label" for="edit-favorito">Favorito</label>
-                    </div>
-                    <label class="ms-auto me-1 mb-0">Estrelas</label>
-                    <input type="number" class="form-control" value="4" style="width: 60px;">
+            <form method="post" action="">
+                @csrf
+                @method('put')
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Livro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-between">
-                <button class="btn btn-danger" onclick="confirmarRemocao()">Remover</button>
-                <div>
-                    <button type="button" class="btn btn-primary">Salvar</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <div class="modal-body">
+                    <input type="text" name="title" class="form-control mb-2" placeholder="Título"
+                        value="The Witcher">
+                    <input type="text" name="author" class="form-control mb-2" placeholder="Autor"
+                        value="Fulano de tal">
+                    <textarea name="description" class="form-control mb-2" rows="3">Lorem Ipsum is simply dummy text...</textarea>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="edit-completo" name="complete" checked>
+                            <label class="form-check-label" for="edit-completo">Completou</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="edit-favorito" name="favorite">
+                            <label class="form-check-label" for="edit-favorito">Favorito</label>
+                        </div>
+                        <label class="ms-auto me-1 mb-0">Estrelas</label>
+                        <input type="number" name="stars" class="form-control" value="4"
+                            style="width: 60px;">
+                    </div>
                 </div>
-            </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button class="btn btn-danger" onclick="confirmarRemocao()">Remover</button>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -123,10 +140,20 @@
         bootstrap.Modal.getInstance(document.getElementById('modalImagem')).hide();
     }
 
-    function abrirModalEdicao() {
-        const modal = new bootstrap.Modal(document.getElementById('modalEdicao'));
-        modal.show();
+    function abrirModalEdicao(botao) {
+        const modal = document.getElementById('modalEdicao');
+
+        modal.querySelector('[name="title"]').value = botao.dataset.title;
+        modal.querySelector('[name="author"]').value = botao.dataset.author;
+        modal.querySelector('[name="description"]').value = botao.dataset.description;
+        modal.querySelector('[name="complete"]').checked = botao.dataset.complete === '1';
+        modal.querySelector('[name="favorite"]').checked = botao.dataset.favorite === '1';
+        modal.querySelector('[name="stars"]').value = botao.dataset.stars;
+        modal.querySelector('form').action = botao.dataset.action;
+
+        new bootstrap.Modal(modal).show();
     }
+
 
     function confirmarRemocao() {
         const modal = new bootstrap.Modal(document.getElementById('modalConfirmarRemocao'));

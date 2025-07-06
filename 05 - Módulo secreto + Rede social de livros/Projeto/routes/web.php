@@ -34,4 +34,5 @@ Route::middleware('auth')->prefix('user')->group(function () {
 
 Route::middleware('auth')->prefix('book')->group(function () {
     Route::post('/', [BookController::class, 'store'])->name('book.store');
+    Route::put('/{id}/update', [BookController::class, 'update'])->name('book.update')->whereNumber('id');
 });
